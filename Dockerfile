@@ -11,3 +11,4 @@ run chown root:root /usr/local/bin/lets-ldap
 run chmod 777 /root/start.sh
 run export DEBIAN_FRONTEND=gtk
 entrypoint "/root/start.sh"
+
