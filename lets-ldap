@@ -1,0 +1,60 @@
+#!/bin/bash
+A=$(tput sgr0)
+export TERM=xterm
+
+if [ ! -e /etc/ldap.conf-org ]; then
+cp /etc/ldap.conf /etc/ldap.conf-org
+fi
+
+dpkg-reconfigure ldap-auth-config
+
+
+## editing the file '/etc/nsswitch.conf' will allow us to specify that the LDAP credentials should be modified when users issue authentication change commands.
+if [ ! -e /etc/nsswitch.conf-org ]; then
+cp /etc/nsswitch.conf /etc/nsswitch.conf-org
+cat <<EOF > /etc/nsswitch.conf
+# /etc/nsswitch.conf
+#
+# Example configuration of GNU Name Service Switch functionality.
+# If you have the "glibc-doc-reference" and info packages installed, try:
+# 'info libc "Name Service Switch"' for information about this file.
+
+passwd:         ldap compat
+group:          ldap compat
+shadow:         ldap compat
+
+hosts:          files dns
+networks:       files
+
+protocols:      db files
+services:       db files
+ethers:         db files
+rpc:            db files
+
+netgroup:       nis
+EOF
+fi
+
+
+## This will create a home directory on the client machine when an LDAP user logs in who does not have a home directory.
+if [ ! -e /etc/pam.d/common-session-org ]; then
+cp /etc/pam.d/common-session /etc/pam.d/common-session-org
+echo "session required    pam_mkhomedir.so skel=/etc/skel umask=0022" >> /etc/pam.d/common-session
+sed -i "s|use_authtok||g" /etc/pam.d/common-password
+fi
+
+
+## restarting services
+
+/etc/init.d/ssh restart
+/etc/init.d/nscd restart
+
+
+# reference ::
+
+#base dc=akhil,dc=system,dc=local 			(Distinguished name)		BASE_DN
+#uri ldap://192.168.1.106:8995 				(Uniform Resource Identifier)	URI
+#rootbinddn cn=admin,dc=akhil,dc=system,dc=local 	(LDAP account for root)		ROOT_ADDCOUNT
+#(in '/etc/ldap.secret' file)				(LDAP root account password)	ROOT_PASSWORD
+#ldap_version 3
+#pam_password md5
