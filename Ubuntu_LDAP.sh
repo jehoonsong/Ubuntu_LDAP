@@ -1,8 +1,7 @@
 #!/bin/bash 
-# IP_ADDR=`dig +short myip.opendns.com @resolver1.opendns.com`
-IMAGE=jhsong/ldap_client:latest
+IMAGE=ubuntu_ldap:latest
 ME=$(basename ${HOME})
-CONTAINER=ldap_client-${ME}
+CONTAINER=ubuntu_ldap-${ME}
 DOCKER_HOME=/root
 HOST_SCRATCH_DIR=${HOME}/.scratch
 DOCKER_SCRATCH_DIR=${DOCKER_HOME}/.scratch

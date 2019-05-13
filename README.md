@@ -22,7 +22,7 @@ or
 nohub ./Ubuntu_LDAP.sh update 
 ```
 
-With Ubuntu_LDAP, Linux system administrators can maintain user account more efficiently with centralized way.   
+With Ubuntu_LDAP, Linux system administrators can maintain user account more efficiently with centralized way. So, this docker can be installed in all Linux system. 
 
 Best, 
 
