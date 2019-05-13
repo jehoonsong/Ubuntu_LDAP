@@ -1,5 +1,5 @@
-BASE_DN=ou=users,o=,dc=jumpcloud,dc=com
-BASE_GROUP=ou=groups,o=,dc=jumpcloud,dc=com?sub
+BASE_DN=ou=users,o=ORGANIZATION_CODE,dc=jumpcloud,dc=com
+BASE_GROUP=ou=groups,o=ORGANIZATION_CODE,dc=jumpcloud,dc=com?sub
 URI=ldaps://ldap.jumpcloud.com:636/
-ROOT_ADDCOUNT=uid=jehoons,ou=users,o=,dc=jumpcloud,dc=com
-ROOT_PASSWORD=
+ROOT_ADDCOUNT=uid=ADMIN_USER_ID,ou=users,o=ORGANIZATION_CODE,dc=jumpcloud,dc=com
+ROOT_PASSWORD=ADMIN_USER_PASSWORD

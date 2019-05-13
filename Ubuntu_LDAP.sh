@@ -10,10 +10,10 @@ DOCKER_SCRATCH_DIR=${DOCKER_HOME}/.scratch
 VOLUMNE_MAPS="-v ${HOST_SCRATCH_DIR}:${DOCKER_SCRATCH_DIR} \
 	-v `pwd`/share:${DOCKER_HOME}/share"
 
-PORT_MAPS=-P 
+PORT_MAPS="-p 2202:22"
 OPT_BUILD=". -t ${IMAGE}"
 
-OPT_START="--rm --name ${CONTAINER} ${PORT_MAPS} \
+OPT_START="-it --rm --name ${CONTAINER} ${PORT_MAPS} \
 	${VOLUMNE_MAPS} ${IMAGE}"
 
 build(){
@@ -29,7 +29,7 @@ shell(){
 }
 
 start(){
-    docker run --env-file ./env-file -it --rm --name ${CONTAINER} ${IMAGE}
+    docker run --env-file ./env-file ${OPT_START} 
 }
 
 stop(){

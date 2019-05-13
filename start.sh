@@ -91,7 +91,7 @@ fi
 /etc/init.d/ssh restart
 /etc/init.d/nscd restart
 
-tailf /root/start.sh
+tail -f /root/start.sh
 
 
 # reference ::
