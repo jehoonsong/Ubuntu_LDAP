@@ -4,8 +4,7 @@ argparse "$@" <<EOF || exit 1
 parser.add_argument('exec_mode', type=str, 
     help='build|start|stop|shell|update'
     )
-parser.add_argument('-d', '--daemon', 
-    action='store_true',
+parser.add_argument('-d', '--daemon', action='store_true',
     help='run with daemon mode? [default %(default)s]', 
     default=False
     )
