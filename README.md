@@ -4,6 +4,8 @@ LDAP, the Lightweight Directory Access Protocol, is a mature, flexible, and well
 
 Ubuntu_LDAP (Docker) is minial version for linux with LDAP (Lightweight Directory Access Protocol) authentication. Here, we use LDAP as centralized authentication system. JumpCloud(jumpcloud.com) is considered as LDAP server. 
 
+## Installation of Ubuntu_LDAP
+
 **Step 1. Prepare accounts**
 
 Prepare accounts (users list) from JumpCloud (jumpcloud.com). First, register as administrator, then add members.  
