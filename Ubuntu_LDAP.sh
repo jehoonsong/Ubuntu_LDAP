@@ -12,13 +12,17 @@ EOF
 if [[ $DAEMON ]]; then
 	opt_start="-d"
 fi
+
 image=ubuntu_ldap:latest
 me=$(basename ${HOME})
 container=ubuntu_ldap-${me}
+container_port="10022"
 docker_home=/root
-port_maps="-p 10022:22"
+port_maps="-p ${container_port}:22"
+volm_maps="-v /var/run/docker.sock:/var/run/docker.sock"
 opt_build=". -t ${image}"
-opt_start="$opt_start --name ${container} ${port_maps} --env-file env-file ${image}"
+opt_start="$opt_start --name ${container} ${port_maps} ${volm_maps} \
+		--env-file env-file ${image}"
 
 _build(){
     docker build ${opt_build} 
