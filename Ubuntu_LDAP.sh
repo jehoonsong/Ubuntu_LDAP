@@ -19,7 +19,7 @@ container=ubuntu_ldap-${me}
 docker_home=/root
 port_maps="-p 10022:22"
 opt_build=". -t ${image}"
-opt_start="$opt_start -it --rm --name ${container} ${port_maps} ${image}"
+opt_start="$opt_start --name ${container} ${port_maps} --env-file env-file ${image}"
 
 _build(){
     docker build ${opt_build} 
@@ -34,7 +34,7 @@ _shell(){
 }
 
 _start(){
-    docker run --env-file ./env-file ${opt_start} 
+    docker run -it --rm ${opt_start} 
 }
 
 _stop(){
