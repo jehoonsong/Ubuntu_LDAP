@@ -1,86 +1,74 @@
 #!/bin/bash 
-IMAGE=ubuntu_ldap:latest
-ME=$(basename ${HOME})
-CONTAINER=ubuntu_ldap-${ME}
-DOCKER_HOME=/root
-HOST_SCRATCH_DIR=${HOME}/.scratch
-DOCKER_SCRATCH_DIR=${DOCKER_HOME}/.scratch
-
-VOLUMNE_MAPS="-v ${HOST_SCRATCH_DIR}:${DOCKER_SCRATCH_DIR} \
-	-v `pwd`/share:${DOCKER_HOME}/share"
-
-PORT_MAPS="-p 2202:22"
-OPT_BUILD=". -t ${IMAGE}"
-
-OPT_START="-it --rm --name ${CONTAINER} ${PORT_MAPS} \
-	${VOLUMNE_MAPS} ${IMAGE}"
-
-build(){
-    docker build ${OPT_BUILD} 
-}
-
-login(){
-    docker exec -it ${CONTAINER} login
-}
-
-shell(){
-    docker exec -it ${CONTAINER} bash 
-}
-
-start(){
-    docker run --env-file ./env-file ${OPT_START} 
-}
-
-stop(){
-    docker stop ${CONTAINER}
-}
-
-rmc(){
-    docker rm ${CONTAINER}
-}
-
 source $(dirname $0)/argparse.bash || exit 1
 argparse "$@" <<EOF || exit 1
 parser.add_argument('exec_mode', type=str, 
     help='build|start|stop|shell|update'
     )
-parser.add_argument('-f', '--foreground', 
+parser.add_argument('-d', '--daemon', 
     action='store_true',
-    help='run with foreground mode? [default %(default)s]', 
+    help='run with daemon mode? [default %(default)s]', 
     default=False
     )
 EOF
+if [[ $DAEMON ]]; then
+	opt_start="-d"
+fi
+image=ubuntu_ldap:latest
+me=$(basename ${HOME})
+container=ubuntu_ldap-${me}
+docker_home=/root
+port_maps="-p 10022:22"
+opt_build=". -t ${image}"
+opt_start="$opt_start -it --rm --name ${container} ${port_maps} ${image}"
+
+_build(){
+    docker build ${opt_build} 
+}
+
+_login(){
+    docker exec -it ${container} login
+}
+
+_shell(){
+    docker exec -it ${container} bash 
+}
+
+_start(){
+    docker run --env-file ./env-file ${opt_start} 
+}
+
+_stop(){
+    docker stop ${container}
+}
 
 case "${EXEC_MODE}" in
-
     shell)
-        shell 
+        _shell 
         ;; 
     login)
-        login 
+        _login 
         ;; 
     build)
-        build 
+        _build 
         ;;
     start)
-        start $FOREGROUND
+        _start $DAEMON
         ;;
     stop)
-        stop
+        _stop
         ;;
     update)
-        build 
+        _build 
         if [ $? -eq 0 ] 
         then  
             echo "wait stoping ..."
             stop 
         wait 
-            start $FOREGROUND
+            _start $DAEMON
         else 
             echo "build failed"
         fi 
         ;; 
     *)
-        echo 
+        echo "what do you want?"
 esac
-
